@@ -40,6 +40,8 @@ def get_selector(method: str):
     if method == 'cis':     return cis.CIS(task="atc")
     #proposed framework
     if method == 'e2sc':   return e2sc.E2SC()
+    if method == 'e2sc-1':   return e2sc.E2SC(alphaMode="exact", betaMode='iterative')
+    if method == 'e2sc-2':   return e2sc.E2SC(alphaMode="approximated", betaMode='heuristic')
 
     return None
 

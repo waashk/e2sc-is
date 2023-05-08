@@ -1,11 +1,13 @@
 
 
 import numpy as np
+#import scipy.sparse as sp
 import copy
 import time
 
 from sklearn.utils.validation import check_X_y
 from sklearn.metrics import f1_score
+from collections import Counter
 from scipy import stats
 
 from src.main.python.weakClassifiers.nmslibKNN import NMSlibKNNClassifier
@@ -31,7 +33,7 @@ class E2SC(InstanceSelectionMixin):
 
     # Instantiation 2
 
-    To demonstrate the flexibility of our framework to cope with large datasets, we propose two modifications. The first one replaces the interactive strategy to optimize the parameter beta with a heuristic based on extracting statistical characteristics of the input dataset (fixed beta). The second modification replaces the exact KNN with an approximate solution with logarithmic complexity, allowing a more scalable and efficient search for the nearest neighbors.
+    To demonstrate the flexibility of our framework to cope with large datasets, we propose two modifications. The first one replaces the interactive strategy to optimize the parameter beta with a heuristic based on extracting statistical characteristics of the input dataset (heuristic beta). The second modification replaces the exact KNN with an approximate solution with logarithmic complexity, allowing a more scalable and efficient search for the nearest neighbors.
 
     Parameters:
     ===========
@@ -44,7 +46,9 @@ class E2SC(InstanceSelectionMixin):
     betaMode : {'iterative', 'prefixed'}, default='iterative'
         Specifies the instantiation to be used in the second phase of the proposed framework. 
         If 'iterative' is given, the beta reduction will be estimated by the iterative near-optimum procedure.
+        If 'heuristic' is given, the beta reduction will be estimated by the heuristic considering the synthetic text characteristics and class distribution.
         If 'prefixed' is given, the beta reduction rate is supposed to be provided as a fixed reduction rate.
+        
 
     beta : float, default=0.0
         Beta reduction rate. It is only significant when betaMode == 'prefixed'
@@ -116,8 +120,8 @@ class E2SC(InstanceSelectionMixin):
         if alphaMode not in ["exact", "approximated"]:
             raise ValueError("Invalid alphaMode type. Expected one of: %s" % ["exact", "approximated"])
         
-        if betaMode not in ["iterative", "prefixed"]:
-            raise ValueError("Invalid betaMode type. Expected one of: %s" % ["iterative", "prefixed"])
+        if betaMode not in ["iterative", "heuristic" ,"prefixed"]:
+            raise ValueError("Invalid betaMode type. Expected one of: %s" % ["iterative", "heuristic", "prefixed"])
         
         if betaMode == "prefixed" and beta == 0.0:
             raise ValueError("beta should be greater than 0.0 when betaMode is setted to prefixed")
@@ -270,7 +274,29 @@ class E2SC(InstanceSelectionMixin):
 
 
         return 1.0-finalResult[0]
+    
+    def heuristic_beta(self, X, y):
 
+        classDist = Counter(y)
+        minor, major = min(classDist.values()), max(classDist.values())
+        
+        if minor/(minor+major) < 0.25: # imbalanced or extremely imbalanced
+            return 0.25
+
+        if np.mean(X.getnnz(axis=1)) < 100: # average density is low (less than 100)
+            return 0.25
+
+        return 0.50
+
+
+    def estimating_beta(self, X, y, alpha):
+
+        if self.betaMode == 'prefixed':
+            return self.beta
+        elif self.betaMode == 'iterative':
+            return self.iterative_beta(X, y, alpha)
+        elif self.betaMode == 'heuristic':
+            return self.heuristic_beta(X, y)
 
     def select_data(self, X, y):
 
@@ -284,10 +310,7 @@ class E2SC(InstanceSelectionMixin):
         
         alpha = self.fitting_alpha(X, y)
 
-        if self.betaMode == 'prefixed':
-            beta = self.beta
-        elif self.betaMode == 'iterative':
-            beta = self.iterative_beta(X, y, alpha)
+        beta = self.estimating_beta(X, y, alpha)
 
         idx_choice_to_remove = self.select_end(alpha, beta)
         self.mask[idx_choice_to_remove] = False

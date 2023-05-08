@@ -37,9 +37,9 @@ class LSBo(InstanceSelectionMixin):
 
     """
 
-    def __init__(self, args, fold):
-        self.outputdir = args.outputdir
-        self.fold = fold
+    def __init__(self): #, args, fold):
+        #self.outputdir = args.outputdir
+        #self.fold = fold
         self.classifier = None
         self.sample_indices_ = []
 
@@ -74,10 +74,14 @@ class LSBo(InstanceSelectionMixin):
 
         len_original_y = len(y)
 
-        splits_df = get_splits(
-            f"{self.outputdir}/split_10_lssm_idxinfold.pkl")
-        S = splits_df.loc[self.fold].train_idxs
-
+        #splits_df = get_splits(
+        #    f"{self.outputdir}/split_10_lssm_idxinfold.pkl")
+        #S = splits_df.loc[self.fold].train_idxs
+        pre_selector = LSSm()
+        X_copy = copy.copy(X)
+        y_copy = copy.copy(y)
+        pre_selector.fit(X_copy,y_copy)
+        S = pre_selector.sample_indices_
 
         self.S = S
         self.S_new = set()

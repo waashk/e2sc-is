@@ -96,7 +96,7 @@ class LSSm(InstanceSelectionMixin):
 
 		self.X_ = np.asarray(X[self.mask])
 		self.y_ = np.asarray(y[self.mask])
-		print(X[self.mask].shape)
+		#print(X[self.mask].shape)
 		self.sample_indices_ = list(sorted(np.where(self.mask == True)[0]))
 		self.reduction_ = 1.0 - float(len(self.y_))/len(y)
 		return self.X_, self.y_

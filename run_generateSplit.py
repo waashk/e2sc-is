@@ -25,10 +25,12 @@ def get_selector(method: str):
     #Baselines
     if method == 'cnn':     return cnn.CNN()
     if method == 'enn':     return enn.ENN()
-    if method == 'icf':     return enn.ICF()
+    if method == 'icf':     return icf.ICF()
     if method == 'lssm':    return lssm.LSSm()
     #if method == 'lsbo':    return lsbo.LSBo(args, fold)
+    if method == 'lsbo':    return lsbo.LSBo()
     #if method == 'drop3':   return drop3.DROP3(args, fold, n_neighbors=3, loadenn=False)
+    if method == 'drop3':   return drop3.DROP3()
     if method == 'ldis':    return ldis.LDIS()
     if method == 'cdis':    return cdis.CDIS()
     if method == 'xldis':   return xldis.XLDIS()

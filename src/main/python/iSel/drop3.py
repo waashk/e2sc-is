@@ -39,10 +39,11 @@ class DROP3(InstanceSelectionMixin):
 
     """
 
-    def __init__(self, args, fold, n_neighbors=3, loadenn=True):
+    #def __init__(self, args, fold, n_neighbors=3, loadenn=True):
+    def __init__(self, n_neighbors=3, loadenn=True):
         self.n_neighbors = n_neighbors
-        self.fold = fold
-        self.outputdir = args.outputdir
+        #self.fold = fold
+        #self.outputdir = args.outputdir
         self.classifier = None
         self.sample_indices_ = []
         self.loadenn = loadenn
@@ -142,7 +143,7 @@ class DROP3(InstanceSelectionMixin):
         S = np.asarray([x for x in range(X.shape[0])])
         S = S[mask]
 
-        print("ENN ", round(1.0 - float(len(S))/len_original_y, 2))
+        #print("ENN ", round(1.0 - float(len(S))/len_original_y, 2))
         return S
 
     def select_data(self, X, y):
@@ -150,12 +151,14 @@ class DROP3(InstanceSelectionMixin):
         X, y = check_X_y(X, y, accept_sparse="csr")
 
         len_original_y = len(y)
-        S = self.ennpadrao(X, y)
+        X_copy = copy.copy(X)
+        y_copy = copy.copy(y)
+        S = self.ennpadrao(X_copy,y_copy)
 
         self.S = S
 
         X = X[self.S]
-        print(X.shape)
+        #print(X.shape)
         y = y[self.S].astype(int)
 
         nSel = len(y)
@@ -194,7 +197,7 @@ class DROP3(InstanceSelectionMixin):
         self.X_ = np.asarray(X[self.mask])
         self.y_ = np.asarray(y[self.mask])
         self.sample_indices_ = np.asarray(self.S)[self.mask]
-        print(self.sample_indices_)
+        #print(self.sample_indices_)
 
         self.reduction_ = 1.0 - float(len(self.y_))/len_original_y
 

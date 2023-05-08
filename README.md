@@ -38,6 +38,24 @@ or run the following jupyter notebook:
 example.ipynb
 ```
 
+or the following python example:
+
+```
+>>> from collections import Counter
+>>> from sklearn.datasets import make_classification
+>>> from src.main.python.iSel import e2sc
+>>> X, y = make_classification(n_classes=2, class_sep=2,
+... weights=[0.1, 0.9], n_informative=3, n_redundant=1, flip_y=0,
+... n_features=20, n_clusters_per_class=1, n_samples=1000, random_state=10)
+>>> print('Original dataset shape %s' % Counter(y))
+Original dataset shape Counter({{1: 900, 0: 100}})
+>>> selector = e2sc.E2SC()
+>>> idx = selector.sample_indices_
+>>> X_train_selected, y_train_selected =  X_train[idx], y_train[idx]
+>>> print('Resampled dataset shape %s' % Counter(y_train_selected))
+Resampled dataset shape Counter({1: 36, 0: 14})
+```
+
 ## Automatic Text Classification Datasets
 
 | **Dataset**  | **Size** | **Dim.** | **# Classes** | **Density** | **Skewness**         | **Link**                                       |

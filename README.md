@@ -57,6 +57,12 @@ Original dataset shape Counter({{1: 900, 0: 100}})
 Resampled dataset shape Counter({1: 36, 0: 14})
 ```
 
+or run the following bash example:
+
+```
+bash bash/run_selection.sh
+```
+
 ## Automatic Text Classification Datasets
 
 | **Dataset**  | **Size** | **Dim.** | **# Classes** | **Density** | **Skewness**         | **Link**                                       |

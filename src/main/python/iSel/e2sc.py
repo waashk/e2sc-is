@@ -235,7 +235,7 @@ class E2SC(InstanceSelectionMixin):
         equivalentPercents = []
         intercept = []
         flagPrevEquivalent = True
-        finalResult = [0.95, 0]
+        finalResult = [0.90, 0]
 
         for percent_to_remove in percents:
 

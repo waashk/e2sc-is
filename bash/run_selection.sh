@@ -1,7 +1,7 @@
-cd $ATCISELWORKDIR
+cd $WORKDIR
 
-datain="$ATCISELWORKDIR/resources/datasets"
-out="$ATCISELWORKDIR/resources/outsel"
+datain="$WORKDIR/resources/datasets"
+out="$WORKDIR/resources/outsel2"
 
 mkdir -p $out
 

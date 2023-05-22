@@ -2,6 +2,10 @@
 
 This repository contains a Python 3 implementation of the E2SC-IS Framework proposed at the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval - SIGIR 23 Conference.
 
+## Requirements
+
+This project is based on ```python==3.6``` and it requires ```Docker version >= 24.0.1```.
+
 ## Installing
 
 Clone this repository in your machine. Execute the installation under the settings directory.
@@ -9,18 +13,15 @@ Clone this repository in your machine. Execute the installation under the settin
 ```
 git clone https://github.com/waashk/e2sc-is.git
 cd e2sc-is/settings/
-bash setup.sh
+docker build -t e2sc:1.0 .
 ```
 
-## Installing Activating environment
+## Activating environment
 
 ```
-source env/bin/activate
+cd ..
+docker run --rm --name e2sc -v .:/e2sc-is -i -t e2sc:1.0 /bin/bash
 ```
-
-### Requirements
-
-This project is based on ```python==3.6```.
 
 ## License
 

@@ -20,7 +20,7 @@ docker build -t e2sc:1.0 .
 
 ```
 cd ..
-docker run --rm --name e2sc -v .:/e2sc-is -i -t e2sc:1.0 /bin/bash
+docker run --rm --name e2sc -v `pwd`:/e2sc-is -i -t e2sc:1.0 /bin/bash
 ```
 
 ## License

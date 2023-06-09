@@ -20,7 +20,7 @@ docker build -t e2sc:1.0 .
 
 ```
 cd ..
-docker run --rm --name e2sc -v .:/e2sc-is -i -t e2sc:1.0 /bin/bash
+docker run --rm --name e2sc -v `pwd`:/e2sc-is -i -t e2sc:1.0 /bin/bash
 ```
 
 ## License
@@ -55,6 +55,12 @@ Original dataset shape Counter({{1: 900, 0: 100}})
 >>> X_train_selected, y_train_selected =  X_train[idx], y_train[idx]
 >>> print('Resampled dataset shape %s' % Counter(y_train_selected))
 Resampled dataset shape Counter({1: 36, 0: 14})
+```
+
+or run the following bash example:
+
+```
+bash bash/run_selection.sh
 ```
 
 ## Automatic Text Classification Datasets

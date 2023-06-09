@@ -20,7 +20,7 @@ docker build -t e2sc:1.0 .
 
 ```
 cd ..
-docker run --rm --name e2sc -v `pwd`:/e2sc-is -i -t e2sc:1.0 /bin/bash
+docker run --rm --name e2sc -p 8888:8888 -v `pwd`:/e2sc-is -i -t e2sc:1.0 /bin/bash
 ```
 
 ## License
@@ -36,6 +36,7 @@ python run_generateSplit.py -d <dataset> -m e2sc-is --datain <data_directory> --
 or run the following jupyter notebook:
 
 ```
+jupyter-notebook --port 8888 --ip=0.0.0.0 --allow-root
 example.ipynb
 ```
 
